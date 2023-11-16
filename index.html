@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binge Buddy</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Binge Buddy</h1>
+        <p>Find your next movie adventure!</p>
+    </header>
+
+    <section id="input-form">
+        <label for="genre">Genre:</label>
+        <input type="text" id="genre" name="genre">
+
+        <label for="director">Director:</label>
+        <input type="text" id="director" name="director">
+
+        <label for="yearRange">Year Range:</label>
+        <input type="range" id="yearRange" name="yearRange" min="1895" max="2025" step="10">
+
+        <button onclick="searchMovies()">Search</button>
+    </section>
+
+    <section id="results" style="display:none;">
+        <ul id="movieList"></ul>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>
