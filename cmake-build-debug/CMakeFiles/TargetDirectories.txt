@@ -1,0 +1,3 @@
+C:/Users/aydin/CLionProjects/BingeBuddy/cmake-build-debug/CMakeFiles/BingeBuddy.dir
+C:/Users/aydin/CLionProjects/BingeBuddy/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/aydin/CLionProjects/BingeBuddy/cmake-build-debug/CMakeFiles/rebuild_cache.dir
