@@ -55,8 +55,8 @@ build CMakeFiles/BingeBuddy.dir/main.cpp.obj: CXX_COMPILER__BingeBuddy_Debug C$:
   OBJECT_DIR = CMakeFiles\BingeBuddy.dir
   OBJECT_FILE_DIR = CMakeFiles\BingeBuddy.dir
 
-build CMakeFiles/BingeBuddy.dir/Movies.cpp.obj: CXX_COMPILER__BingeBuddy_Debug C$:/Users/aydin/CLionProjects/BingeBuddy/Movies.cpp || cmake_object_order_depends_target_BingeBuddy
-  DEP_FILE = CMakeFiles\BingeBuddy.dir\Movies.cpp.obj.d
+build CMakeFiles/BingeBuddy.dir/Movie.cpp.obj: CXX_COMPILER__BingeBuddy_Debug C$:/Users/aydin/CLionProjects/BingeBuddy/Movie.cpp || cmake_object_order_depends_target_BingeBuddy
+  DEP_FILE = CMakeFiles\BingeBuddy.dir\Movie.cpp.obj.d
   FLAGS = -g -fdiagnostics-color=always -std=gnu++14
   OBJECT_DIR = CMakeFiles\BingeBuddy.dir
   OBJECT_FILE_DIR = CMakeFiles\BingeBuddy.dir
@@ -69,7 +69,7 @@ build CMakeFiles/BingeBuddy.dir/Movies.cpp.obj: CXX_COMPILER__BingeBuddy_Debug C
 #############################################
 # Link the executable BingeBuddy.exe
 
-build BingeBuddy.exe: CXX_EXECUTABLE_LINKER__BingeBuddy_Debug CMakeFiles/BingeBuddy.dir/main.cpp.obj CMakeFiles/BingeBuddy.dir/Movies.cpp.obj
+build BingeBuddy.exe: CXX_EXECUTABLE_LINKER__BingeBuddy_Debug CMakeFiles/BingeBuddy.dir/main.cpp.obj CMakeFiles/BingeBuddy.dir/Movie.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\BingeBuddy.dir
