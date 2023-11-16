@@ -3,4 +3,4 @@ project(BingeBuddy)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(BingeBuddy main.cpp)
+add_executable(BingeBuddy main.cpp Movies.cpp)
