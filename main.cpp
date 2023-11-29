@@ -5,24 +5,24 @@
 #include <set>
 #include <chrono>
 #include "Movie.h"
-using namespace std;
 using namespace std::chrono;
 
-// storing movie objects from file
-void ReadInMovies(vector<Movie>& movies) {
-    ifstream file("combined.data.tsv");
+// Reads data file and stores information
+void readFile(std::vector<Movie>& movies) {
+    std::ifstream file("data.tsv");
 
     if (file.is_open()) {
-        string line;
+        std::string line;
         while (std::getline(file, line)) {
-            istringstream stream(line);
-            string title;
-            string year;
-            string runtime;
-            string genres;
-            string directors;
-            string rating;
-            string numRatings;
+            // Initialize and get all information for every movie in the .tsv file
+            std::istringstream stream(line);
+            std::string title;
+            std::string year;
+            std::string runtime;
+            std::string genres;
+            std::string directors;
+            std::string rating;
+            std::string numRatings;
 
             getline(stream, title, '\t');
             getline(stream, year, '\t');
@@ -32,96 +32,118 @@ void ReadInMovies(vector<Movie>& movies) {
             getline(stream, rating, '\t');
             getline(stream, numRatings, '\t');
 
-            istringstream stream1(genres);
-            string genre;
-            vector<string> g;
+            std::istringstream stream1(genres);
+            std::string genre;
+            std::vector<std::string> g;
+            // Add genre to genre vector
             while (getline(stream1, genre, ',')) {
                 g.push_back(genre);
             }
 
-            istringstream stream2(directors);
-            string director;
-            vector<string> d;
+            std::istringstream stream2(directors);
+            std::string director;
+            std::vector<std::string> d;
+            // Add director to director vector
             while (getline(stream2, director, ',')) {
                 d.push_back(director);
             }
-            // creating movie object and pushing into movies vector
+            // Add movie to movie vector
             movies.emplace_back(title, g, d, stoi(year), stoi(runtime), stof(rating), stoi(numRatings));
         }
+    }
+    else {
+        std::cout << "Error" << std::endl;
     }
 }
 
 int main() {
     Movie movie;
 
-    // genres for parsing input
-    vector<string> allGenres = {"Action", "Adventure", "Animation", "Biography", "Comedy", "Crime", "Documentary",
+    // Store all genres
+    std::vector<std::string> genres = {"Action", "Adventure", "Animation", "Biography", "Comedy", "Crime", "Documentary",
                                 "Drama", "Family", "Fantasy", "Film-Noir", "History", "Horror", "Music", "Musical",
                                 "Mystery", "Romance", "Sci-Fi", "Short", "Sport", "Superhero", "Thriller",
                                 "War", "Western"};
+    std::vector<Movie> movies;
+    readFile(movies);
 
-    // vector to store movies after reading from the file
-    vector<Movie> movies;
-    ReadInMovies(movies);
+    // Created with: https://www.asciiart.eu/text-to-ascii-art
+    std::cout << R"(
+    /\_/\  /\_/\  /\_/\  /\_/\  /\_/\  /\_/\  /\_/\  /\_/\  /\_/\  /\_/\  /\_/\  /\_/\
+   ( o.o )( o.o )( o.o )( o.o )( o.o )( o.o )( o.o )( o.o )( o.o )( o.o )( o.o )( o.o )
+    > ^ <  > ^ <  > ^ <  > ^ <  > ^ <  > ^ <  > ^ <  > ^ <  > ^ <  > ^ <  > ^ <  > ^ <
+    /\_/\                                                                        /\_/\
+   ( o.o )                                                                      ( o.o )
+    > ^ <        __        __   _                            _                   > ^ <
+    /\_/\        \ \      / /__| | ___ ___  _ __ ___   ___  | |_ ___             /\_/\
+   ( o.o )        \ \ /\ / / _ \ |/ __/ _ \| '_ ` _ \ / _ \ | __/ _ \           ( o.o )
+    > ^ <          \ V  V /  __/ | (_| (_) | | | | | |  __/ | || (_) |           > ^ <
+    /\_/\       ____\_/\_/ \___|_|\___\___/|_|_|_| |_|\___|_ \__\___/    _       /\_/\
+   ( o.o )     | __ )(_)_ __   __ _  ___  | __ ) _   _  __| | __| |_   _| |     ( o.o )
+    > ^ <      |  _ \| | '_ \ / _` |/ _ \ |  _ \| | | |/ _` |/ _` | | | | |      > ^ <
+    /\_/\      | |_) | | | | | (_| |  __/ | |_) | |_| | (_| | (_| | |_| |_|      /\_/\
+   ( o.o )     |____/|_|_| |_|\__, |\___| |____/ \__,_|\__,_|\__,_|\__, (_)     ( o.o )
+    > ^ <                     |___/                                |___/         > ^ <
+    /\_/\                                                                        /\_/\
+   ( o.o )                                                                      ( o.o )
+    > ^ <                                                                        > ^ <
+    /\_/\  /\_/\  /\_/\  /\_/\  /\_/\  /\_/\  /\_/\  /\_/\  /\_/\  /\_/\  /\_/\  /\_/\
+   ( o.o )( o.o )( o.o )( o.o )( o.o )( o.o )( o.o )( o.o )( o.o )( o.o )( o.o )( o.o )
+    > ^ <  > ^ <  > ^ <  > ^ <  > ^ <  > ^ <  > ^ <  > ^ <  > ^ <  > ^ <  > ^ <  > ^ <)" << std::endl;
 
-    // main menu options
-    cout << "* Welcome to Movie Magic! *" << endl;
-    cout << "Our goal is to make finding movies suited to your tastes easier." << endl;
-    cout << endl;
-    cout << "Please enter up to three numbers corresponding to your favorite genres or type in your favorite director." << endl;
-    cout << "(Ex. \"1 2 4\" or \"Ryan Coogler\")" << endl;
-    cout << endl;
-    cout << "1. Action         9.  Family        17. Romance" << endl;
-    cout << "2. Adventure      10. Fantasy       18. Sci-Fi" << endl;
-    cout << "3. Animation      11. Film Noir     19. Short Film" << endl;
-    cout << "4. Biography      12. History       20. Sport" << endl;
-    cout << "5. Comedy         13. Horror        21. Superhero" << endl;
-    cout << "6. Crime          14. Music         22. Thriller" << endl;
-    cout << "7. Documentary    15. Musical       23. War" << endl;
-    cout << "8. Drama          16. Mystery       24. Western" << endl;
-    cout << "Type 0 to exit." << endl;
-    cout << endl;
+    // Genre Menu
+    std::cout << std::endl;
+    std::cout << "Please enter up to three numbers corresponding to these genres, or a director's name." << std::endl;
+    std::cout << std::endl;
+    std::cout << "1. Action         9.  Family        17. Romance" << std::endl;
+    std::cout << "2. Adventure      10. Fantasy       18. Sci-Fi" << std::endl;
+    std::cout << "3. Animation      11. Film Noir     19. Short Film" << std::endl;
+    std::cout << "4. Biography      12. History       20. Sport" << std::endl;
+    std::cout << "5. Comedy         13. Horror        21. Superhero" << std::endl;
+    std::cout << "6. Crime          14. Music         22. Thriller" << std::endl;
+    std::cout << "7. Documentary    15. Musical       23. War" << std::endl;
+    std::cout << "8. Drama          16. Mystery       24. Western" << std::endl;
+    std::cout << "Press 0 to exit." << std::endl;
+    std::cout << std::endl;
 
-    // variables
-    set<Movie> movieSet;
+    // Additional data structures
+    // Set to store all movie information
+    std::set<Movie> movieSet;
+    // Dynamically allocated array to use during shell sorts
     Movie* movieArray;
-    Movie* movieArray2;
     bool exit = false;
 
     while (true) {
-        string line;
-        // taking user input
-        getline(cin, line);
-        istringstream stream(line);
-        // exit if user enters 0
+        std::string line;
+        getline(std::cin, line);
+        std::istringstream stream(line);
+        // Exit
         if (line.at(0) == '0' && line.length() == 1) {
             exit = true;
             break;
         }
 
-        // director entered
-        if (movie.validDirectorName(line)) {
-            // adding movies with desired director to movieSet
-            for (int i = 0; i < movies.size(); i++) {
-                vector<string> directors = movies.at(i).getDirector();
+        // Validating directors and genres before adding to the movie set
+        if (movie.validateDirector(line)) {
+            for (const auto & movie : movies) {
+                std::vector<std::string> directors = movie.getDirector();
                 for (int j = 0; j < directors.size(); j++) {
-                    if (directors.at(j).compare(line) == 0) {
-                        movieSet.insert(movies.at(i));
+                    if (directors.at(j) == line) {
+                        // Add to set
+                        movieSet.insert(movie);
                     }
                 }
             }
             break;
         }
-            // movie genre entered
-        else if (movie.validGenreInput(line)) {
-            string num;
-            // looping through each entered number
+        else if (movie.validateGenre(line)) {
+            std::string num;
             while (getline(stream, num, ' ')) {
-                // adding movies with desired genres to movieSet
                 for (int i = 0; i < movies.size(); i++) {
-                    vector<string> genres = movies.at(i).getGenre();
-                    for (int j = 0; j < genres.size(); j++) {
-                        if (genres.at(j) == allGenres.at(stoi(num) - 1)) {
+                    std::vector<std::string> genresA = movies.at(i).getGenre();
+                    for (int j = 0; j < genresA.size(); j++) {
+                        if (genresA.at(j) == genres.at(stoi(num) - 1)) {
+                            // Add to set
                             movieSet.insert(movies.at(i));
                         }
                     }
@@ -130,25 +152,25 @@ int main() {
             }
             break;
         }
-            // invalid input
         else {
-            cout << "Please enter valid input" << endl;
-            cout << endl;
+            std::cout << "Invalid Input." << std::endl;
+            std::cout << std::endl;
         }
     }
 
-    // one array for each sort
-    set<Movie> ::iterator iter;
+    // Set iteration
+    std::set<Movie> ::iterator iter;
     int count = 0;
     movieArray = new Movie[movieSet.size()];
     for (iter = movieSet.begin(); iter != movieSet.end(); ++iter) {
         movieArray[count] = *iter;
         count++;
     }
+    // Movie vector for merge sorts
+    std::vector<Movie> movieVector;
     count = 0;
-    movieArray2 = new Movie[movieSet.size()];
     for (iter = movieSet.begin(); iter != movieSet.end(); ++iter) {
-        movieArray2[count] = *iter;
+        movieVector.push_back(*iter);
         count++;
     }
 
@@ -157,158 +179,140 @@ int main() {
         if (exit) {
             break;
         }
-        // no movies found
+
+        // If there are no movies fitting the criteria
         if (movieSet.empty()) {
-            cout << "No movies corresponded to your search." << endl;
+            std::cout << "No movies available." << std::endl;
             break;
         }
 
-        bool another = true;
+        bool again = true;
 
-        while (another) {
-            // second menu
-            cout << endl;
-            cout << "Please enter the criteria you would like to sort the movies on." << endl;
-            cout << "Ex. \"1\" or \"2\"" << endl;
-            cout << endl;
-            cout << "1. Length (from longest)" << endl;
-            cout << "2. Length (from shortest)" << endl;
-            cout << "3. Rating (from highest)" << endl;
-            cout << "4. Rating (from lowest)" << endl;
-            cout << "5. Number of Ratings (from highest)" << endl;
-            cout << "6. Number of Ratings (from lowest)" << endl;
-            cout << "Type 0 to exit." << endl;
-            cout << endl;
+        while (again) {
+            // Action Menu
+            std::cout << std::endl;
+            std::cout << "How would you like to sort your movies?." << std::endl;
+            std::cout << std::endl;
+            std::cout << "1. Length (from longest)" << std::endl;
+            std::cout << "2. Length (from shortest)" << std::endl;
+            std::cout << "3. Rating (from highest)" << std::endl;
+            std::cout << "4. Rating (from lowest)" << std::endl;
+            std::cout << "5. Number of Ratings (from highest)" << std::endl;
+            std::cout << "6. Number of Ratings (from lowest)" << std::endl;
+            std::cout << "7. Year (from latest)" << std::endl;
+            std::cout << "8. Year (from oldest)" << std::endl;
+            std::cout << "9. Title (ascending)" << std::endl;
+            std::cout << "10. Title (descending)" << std::endl;
+            std::cout << "11. Director (ascending)" << std::endl;
+            std::cout << "12. Director (descending)" << std::endl;
+            std::cout << "13. Genre (ascending)" << std::endl;
+            std::cout << "14. Genre (descending)" << std::endl;
+            std::cout << "Type 0 to exit." << std::endl;
+            std::cout << std::endl;
 
-            another = false;
-            string option;
-            getline(cin, option);
+            again = false;
+            std::string option;
+            getline(std::cin, option);
 
-            // if digit
-            if (option.size() == 1 && isdigit(option.at(0))) {
-                // length from longest
+            // Valid option choice
+            if ((option.size() == 1  || option.size() == 2) && isdigit(option.at(0))) {
+                // Length from longest to shortest
                 if (stoi(option) == 1) {
-                    cout << endl;
-                    // radix sort
+                    std::cout << std::endl;
+
+                    // Start timer for merge sort
                     auto start = high_resolution_clock::now();
-                    movie.radixSortLength(movieArray, movieSet.size());
+                    movie.mergeSortLength(movieVector, 0, movieSet.size() - 1);
+                    // End timer for merge sort
                     auto stop = high_resolution_clock::now();
+                    // Calculate time for merge sort in nanoseconds
                     auto duration = duration_cast<nanoseconds>(stop - start);
+                    // Output the results
+                    std::cout << "Merge Sort (" << duration.count() << " nanoseconds)" << std::endl;
+                    std::cout << std::endl;
 
-                    cout << "Radix Sort (" << duration.count() << " nanoseconds)" << endl;
-                    cout << endl;
-
+                    // If there are less than 100 movies available
                     if (movieSet.size() < 100) {
                         int current = 1;
                         for (int i = movieSet.size() - 1; i >= 0; i--) {
-                            cout << current << ". ";
-                            movieArray[i].print();
+                            std::cout << current << ". ";
+                            movieVector[i].print();
                             current++;
                         }
                     }
                     else {
                         int current = 1;
                         for (int i = movieSet.size() - 1; i >= movieSet.size() - 100; i--) {
-                            cout << current << ". ";
-                            movieArray[i].print();
+                            std::cout << current << ". ";
+                            movieVector[i].print();
                             current++;
                         }
                     }
-                    cout << endl;
+                    std::cout << std::endl;
 
-                    // quick sort
+                    // Start timer for shell sort
                     auto start1 = high_resolution_clock::now();
-                    movie.quickSort(movieArray2, 0, movieSet.size() - 1);
+                    Movie::shellSort<Movie>(movieArray, movieSet.size(), Movie::compareByLength);
+                    // End timer for shell sort
                     auto stop1 = high_resolution_clock::now();
+                    // Calculate time for shell sort in nanoseconds
                     auto duration1 = duration_cast<nanoseconds>(stop1 - start1);
+                    // Output the results
+                    std::cout << "Shell Sort (" << duration1.count() << " nanoseconds)" << std::endl;
+                    std::cout << std::endl;
 
-                    cout << "Quick Sort (" << duration1.count() << " nanoseconds)" << endl;
-                    cout << endl;
+                    // If there are less than 100 movies available
                     if (movieSet.size() < 100) {
-                        int current = 1;
-                        for (int i = movieSet.size() - 1; i >= 0; i--) {
-                            cout << current << ". ";
-                            movieArray2[i].print();
-                            current++;
+                        for (int i = 0; i < movieSet.size(); i++) {
+                            std::cout << i + 1 << ". ";
+                            movieArray[i].print();
                         }
                     }
                     else {
-                        int current = 1;
-                        for (int i = movieSet.size() - 1; i >= movieSet.size() - 100; i--) {
-                            cout << current << ". ";
-                            movieArray2[i].print();
-                            current++;
+                        for (int i = 0; i < 100; i++) {
+                            std::cout << i + 1 << ". ";
+                            movieArray[i].print();
                         }
                     }
-
-
-
                 }
-                    // length from shortest
+
+                // Length from shortest to longest
                 else if (stoi(option) == 2) {
-                    cout << endl;
-                    // radix sort
+                    std::cout << std::endl;
+
                     auto start = high_resolution_clock::now();
-                    movie.radixSortLength(movieArray, movieSet.size());
+                    movie.mergeSortLength(movieVector, 0, movieSet.size() - 1);
                     auto stop = high_resolution_clock::now();
                     auto duration = duration_cast<nanoseconds>(stop - start);
+                    std::cout << "Merge Sort (" << duration.count() << " nanoseconds)" << std::endl;
+                    std::cout << std::endl;
 
-                    cout << "Radix Sort (" << duration.count() << " nanoseconds)" << endl;
-                    cout << endl;
                     if (movieSet.size() < 100) {
                         for (int i = 0; i < movieSet.size(); i++) {
-                            cout << i + 1 << ". ";
-                            movieArray[i].print();
+                            std::cout << i + 1 << ". ";
+                            movieVector[i].print();
                         }
                     }
                     else {
                         for (int i = 0; i < 100; i++) {
-                            cout << i + 1 << ". ";
-                            movieArray[i].print();
+                            std::cout << i + 1 << ". ";
+                            movieVector[i].print();
                         }
                     }
-                    cout << endl;
-
-                    // quick sort
+                    std::cout << std::endl;
 
                     auto start1 = high_resolution_clock::now();
-                    movie.quickSort(movieArray2, 0, movieSet.size() - 1);
+                    Movie::shellSort<Movie>(movieArray, movieSet.size(), Movie::compareByLength);
                     auto stop1 = high_resolution_clock::now();
                     auto duration1 = duration_cast<nanoseconds>(stop1 - start1);
 
-                    cout << "Quick Sort (" << duration1.count() << " nanoseconds)" << endl;
-                    cout << endl;
+                    std::cout << "Shell Sort (" << duration1.count() << " nanoseconds)" << std::endl;
+                    std::cout << std::endl;
 
-                    if (movieSet.size() < 100) {
-                        for (int i = 0; i < movieSet.size(); i++) {
-                            cout << i + 1 << ". ";
-                            movieArray2[i].print();
-                        }
-                    }
-                    else {
-                        for (int i = 0; i < 100; i++) {
-                            cout << i + 1 << ". ";
-                            movieArray2[i].print();
-                        }
-                    }
-
-
-
-                }
-                else if (stoi(option) == 3) { // rating from highest
-                    cout << endl;
-                    // radix sort
-                    auto start = high_resolution_clock::now();
-                    movie.radixSortRatings(movieArray, movieSet.size());
-                    auto stop = high_resolution_clock::now();
-                    auto duration = duration_cast<nanoseconds>(stop - start);
-
-                    cout << "Radix Sort (" << duration.count() << " nanoseconds)" << endl;
-                    cout << endl;
                     if (movieSet.size() < 100) {
                         int current = 1;
                         for (int i = movieSet.size() - 1; i >= 0; i--) {
-                            cout << current << ". ";
+                            std::cout << current << ". ";
                             movieArray[i].print();
                             current++;
                         }
@@ -316,200 +320,649 @@ int main() {
                     else {
                         int current = 1;
                         for (int i = movieSet.size() - 1; i >= movieSet.size() - 100; i--) {
-                            cout << current << ". ";
+                            std::cout << current << ". ";
                             movieArray[i].print();
                             current++;
                         }
                     }
-                    cout << endl;
+                    std::cout << std::endl;
+                }
 
-                    // quick sort
-                    auto start1 = high_resolution_clock::now();
-                    movie.quickSortRatings(movieArray2, 0, movieSet.size() - 1);
-                    auto stop1 = high_resolution_clock::now();
-                    auto duration1 = duration_cast<nanoseconds>(stop1 - start1);
-                    cout << "Quick Sort (" << duration1.count() << " nanoseconds)" << endl;
-                    cout << endl;
+                // Rating from highest to lowest
+                else if (stoi(option) == 3) {
+                    std::cout << std::endl;
+
+                    auto start = high_resolution_clock::now();
+                    movie.mergeSortRatings(movieVector, 0, movieSet.size() - 1);
+                    auto stop = high_resolution_clock::now();
+                    auto duration = duration_cast<nanoseconds>(stop - start);
+                    std::cout << "Merge Sort (" << duration.count() << " nanoseconds)" << std::endl;
+                    std::cout << std::endl;
+
                     if (movieSet.size() < 100) {
                         int current = 1;
                         for (int i = movieSet.size() - 1; i >= 0; i--) {
-                            cout << current << ". ";
-                            movieArray2[i].print();
+                            std::cout << current << ". ";
+                            movieVector[i].print();
                             current++;
                         }
                     }
                     else {
                         int current = 1;
                         for (int i = movieSet.size() - 1; i >= movieSet.size() - 100; i--) {
-                            cout << current << ". ";
-                            movieArray2[i].print();
+                            std::cout << current << ". ";
+                            movieVector[i].print();
                             current++;
                         }
                     }
+                    std::cout << std::endl;
 
+                    auto start1 = high_resolution_clock::now();
+                    Movie::shellSort<Movie>(movieArray, movieSet.size(), Movie::compareByRating);
+                    auto stop1 = high_resolution_clock::now();
+                    auto duration1 = duration_cast<nanoseconds>(stop1 - start1);
+
+                    std::cout << "Shell Sort (" << duration1.count() << " nanoseconds)" << std::endl;
+                    std::cout << std::endl;
+
+                    if (movieSet.size() < 100) {
+                        for (int i = 0; i < movieSet.size(); i++) {
+                            std::cout << i + 1 << ". ";
+                            movieArray[i].print();
+                        }
+                    }
+                    else {
+                        for (int i = 0; i < 100; i++) {
+                            std::cout << i + 1 << ". ";
+                            movieArray[i].print();
+                        }
+                    }
                 }
-                    // rating from lowest
+
+                // Rating from lowest to highest
                 else if (stoi(option) == 4) {
-                    cout << endl;
-                    // radix sort
+                    std::cout << std::endl;
+
                     auto start = high_resolution_clock::now();
-                    movie.radixSortRatings(movieArray, movieSet.size());
+                    movie.mergeSortRatings(movieVector, 0, movieSet.size() - 1);
                     auto stop = high_resolution_clock::now();
                     auto duration = duration_cast<nanoseconds>(stop - start);
+                    std::cout << "Merge Sort (" << duration.count() << " nanoseconds)" << std::endl;
+                    std::cout << std::endl;
 
-                    cout << "Radix Sort (" << duration.count() << " nanoseconds)" << endl;
-                    cout << endl;
                     if (movieSet.size() < 100) {
                         for (int i = 0; i < movieSet.size(); i++) {
-                            cout << i + 1 << ". ";
-                            movieArray[i].print();
+                            std::cout << i + 1 << ". ";
+                            movieVector[i].print();
                         }
                     }
                     else {
                         for (int i = 0; i < 100; i++) {
-                            cout << i + 1 << ". ";
-                            movieArray[i].print();
+                            std::cout << i + 1 << ". ";
+                            movieVector[i].print();
                         }
                     }
-                    cout << endl;
+                    std::cout << std::endl;
 
-                    // quick sort
                     auto start1 = high_resolution_clock::now();
-                    movie.quickSortRatings(movieArray2, 0, movieSet.size() - 1);
+                    Movie::shellSort<Movie>(movieArray, movieSet.size(), Movie::compareByRating);
                     auto stop1 = high_resolution_clock::now();
                     auto duration1 = duration_cast<nanoseconds>(stop1 - start1);
-                    cout << "Quick Sort (" << duration.count() << " nanoseconds)" << endl;
-                    cout << endl;
+
+                    std::cout << "Shell Sort (" << duration1.count() << " nanoseconds)" << std::endl;
+                    std::cout << std::endl;
+
                     if (movieSet.size() < 100) {
-                        for (int i = 0; i < movieSet.size(); i++) {
-                            cout << i + 1 << ". ";
-                            movieArray2[i].print();
+                        int current = 1;
+                        for (int i = movieSet.size() - 1; i >= 0; i--) {
+                            std::cout << current << ". ";
+                            movieArray[i].print();
+                            current++;
                         }
                     }
                     else {
-                        for (int i = 0; i < 100; i++) {
-                            cout << i + 1 << ". ";
-                            movieArray2[i].print();
+                        int current = 1;
+                        for (int i = movieSet.size() - 1; i >= movieSet.size() - 100; i--) {
+                            std::cout << current << ". ";
+                            movieArray[i].print();
+                            current++;
                         }
                     }
-
-
+                    std::cout << std::endl;
                 }
-                    // number of ratings from highest
+
+                // Number of ratings from highest to lowest
                 else if (stoi(option) == 5) {
-                    cout << endl;
-                    // radix sort
+                    std::cout << std::endl;
+
                     auto start = high_resolution_clock::now();
-                    movie.radixSortNumRatings(movieArray, movieSet.size());
+                    movie.mergeSortNumRatings(movieVector, 0, movieSet.size() - 1);
                     auto stop = high_resolution_clock::now();
                     auto duration = duration_cast<nanoseconds>(stop - start);
+                    std::cout << "Merge Sort (" << duration.count() << " nanoseconds)" << std::endl;
+                    std::cout << std::endl;
 
-                    cout << "Radix Sort (" << duration.count() << " nanoseconds)" << endl;
-                    cout << endl;
                     if (movieSet.size() < 100) {
                         int current = 1;
                         for (int i = movieSet.size() - 1; i >= 0; i--) {
-                            cout << current << ". ";
-                            movieArray[i].print();
+                            std::cout << current << ". ";
+                            movieVector[i].print();
                             current++;
                         }
                     }
                     else {
                         int current = 1;
                         for (int i = movieSet.size() - 1; i >= movieSet.size() - 100; i--) {
-                            cout << current << ". ";
-                            movieArray[i].print();
+                            std::cout << current << ". ";
+                            movieVector[i].print();
                             current++;
                         }
                     }
-                    cout << endl;
+                    std::cout << std::endl;
 
-                    // quick sort
                     auto start1 = high_resolution_clock::now();
-                    movie.quickSortNumOfRatings(movieArray2, 0, movieSet.size() - 1);
+                    Movie::shellSort<Movie>(movieArray, movieSet.size(), Movie::compareByNumRatings);
                     auto stop1 = high_resolution_clock::now();
                     auto duration1 = duration_cast<nanoseconds>(stop1 - start1);
-                    cout << "Quick Sort (" << duration1.count() << " nanoseconds)" << endl;
-                    cout << endl;
+
+                    std::cout << "Shell Sort (" << duration1.count() << " nanoseconds)" << std::endl;
+                    std::cout << std::endl;
+
                     if (movieSet.size() < 100) {
-                        int current = 1;
-                        for (int i = movieSet.size() - 1; i >= 0; i--) {
-                            cout << current << ". ";
-                            movieArray2[i].print();
-                            current++;
+                        for (int i = 0; i < movieSet.size(); i++) {
+                            std::cout << i + 1 << ". ";
+                            movieArray[i].print();
                         }
                     }
                     else {
-                        int current = 1;
-                        for (int i = movieSet.size() - 1; i >= movieSet.size() - 100; i--) {
-                            cout << current << ". ";
-                            movieArray2[i].print();
-                            current++;
+                        for (int i = 0; i < 100; i++) {
+                            std::cout << i + 1 << ". ";
+                            movieArray[i].print();
                         }
                     }
-
                 }
-                    // number of ratings from lowest
+
+                // Number of ratings from lowest to highest
                 else if (stoi(option) == 6) {
-                    cout << endl;
-                    // radix sort
+                    std::cout << std::endl;
+
                     auto start = high_resolution_clock::now();
-                    movie.radixSortNumRatings(movieArray, movieSet.size());
+                    movie.mergeSortNumRatings(movieVector, 0, movieSet.size() - 1);
                     auto stop = high_resolution_clock::now();
                     auto duration = duration_cast<nanoseconds>(stop - start);
+                    std::cout << "Merge Sort (" << duration.count() << " nanoseconds)" << std::endl;
+                    std::cout << std::endl;
 
-                    cout << "Radix Sort (" << duration.count() << " nanoseconds)" << endl;
-                    cout << endl;
-                    movie.radixSortNumRatings(movieArray, movieSet.size());
                     if (movieSet.size() < 100) {
                         for (int i = 0; i < movieSet.size(); i++) {
-                            cout << i + 1 << ". ";
-                            movieArray[i].print();
+                            std::cout << i + 1 << ". ";
+                            movieVector[i].print();
                         }
                     }
                     else {
                         for (int i = 0; i < 100; i++) {
-                            cout << i + 1 << ". ";
-                            movieArray[i].print();
+                            std::cout << i + 1 << ". ";
+                            movieVector[i].print();
                         }
                     }
-                    cout << endl;
+                    std::cout << std::endl;
 
-                    // quick sort
                     auto start1 = high_resolution_clock::now();
-                    movie.quickSortNumOfRatings(movieArray2, 0, movieSet.size() - 1);
+                    Movie::shellSort<Movie>(movieArray, movieSet.size(), Movie::compareByNumRatings);
                     auto stop1 = high_resolution_clock::now();
                     auto duration1 = duration_cast<nanoseconds>(stop1 - start1);
-                    cout << "Quick Sort (" << duration.count() << " nanoseconds)" << endl;
-                    cout << endl;
+
+                    std::cout << "Shell Sort (" << duration1.count() << " nanoseconds)" << std::endl;
+                    std::cout << std::endl;
+
+                    if (movieSet.size() < 100) {
+                        int current = 1;
+                        for (int i = movieSet.size() - 1; i >= 0; i--) {
+                            std::cout << current << ". ";
+                            movieArray[i].print();
+                            current++;
+                        }
+                    }
+                    else {
+                        int current = 1;
+                        for (int i = movieSet.size() - 1; i >= movieSet.size() - 100; i--) {
+                            std::cout << current << ". ";
+                            movieArray[i].print();
+                            current++;
+                        }
+                    }
+                    std::cout << std::endl;
+                }
+
+                // Year from latest to oldest
+                else if (stoi(option) == 7) {
+                    std::cout << std::endl;
+
+                    auto start = high_resolution_clock::now();
+                    movie.mergeSortYears(movieVector, 0, movieSet.size() - 1);
+                    auto stop = high_resolution_clock::now();
+                    auto duration = duration_cast<nanoseconds>(stop - start);
+                    std::cout << "Merge Sort (" << duration.count() << " nanoseconds)" << std::endl;
+                    std::cout << std::endl;
+
+                    if (movieSet.size() < 100) {
+                        int current = 1;
+                        for (int i = movieSet.size() - 1; i >= 0; i--) {
+                            std::cout << current << ". ";
+                            movieVector[i].print();
+                            current++;
+                        }
+                    }
+                    else {
+                        int current = 1;
+                        for (int i = movieSet.size() - 1; i >= movieSet.size() - 100; i--) {
+                            std::cout << current << ". ";
+                            movieVector[i].print();
+                            current++;
+                        }
+                    }
+                    std::cout << std::endl;
+
+                    auto start1 = high_resolution_clock::now();
+                    Movie::shellSort<Movie>(movieArray, movieSet.size(), Movie::compareByYear);
+                    auto stop1 = high_resolution_clock::now();
+                    auto duration1 = duration_cast<nanoseconds>(stop1 - start1);
+
+                    std::cout << "Shell Sort (" << duration1.count() << " nanoseconds)" << std::endl;
+                    std::cout << std::endl;
+
                     if (movieSet.size() < 100) {
                         for (int i = 0; i < movieSet.size(); i++) {
-                            cout << i + 1 << ". ";
-                            movieArray2[i].print();
+                            std::cout << i + 1 << ". ";
+                            movieArray[i].print();
                         }
                     }
                     else {
                         for (int i = 0; i < 100; i++) {
-                            cout << i + 1 << ". ";
-                            movieArray2[i].print();
+                            std::cout << i + 1 << ". ";
+                            movieArray[i].print();
                         }
                     }
-
+                    std::cout << std::endl;
                 }
+
+                // Year from oldest to latest
+                else if (stoi(option) == 8) {
+                    std::cout << std::endl;
+
+                    auto start = high_resolution_clock::now();
+                    movie.mergeSortYears(movieVector, 0, movieSet.size() - 1);
+                    auto stop = high_resolution_clock::now();
+                    auto duration = duration_cast<nanoseconds>(stop - start);
+                    std::cout << "Merge Sort (" << duration.count() << " nanoseconds)" << std::endl;
+                    std::cout << std::endl;
+                    if (movieSet.size() < 100) {
+                        for (int i = 0; i < movieSet.size(); i++) {
+                            std::cout << i + 1 << ". ";
+                            movieVector[i].print();
+                        }
+                    }
+                    else {
+                        for (int i = 0; i < 100; i++) {
+                            std::cout << i + 1 << ". ";
+                            movieVector[i].print();
+                        }
+                    }
+                    std::cout << std::endl;
+
+                    auto start1 = high_resolution_clock::now();
+                    Movie::shellSort<Movie>(movieArray, movieSet.size(), Movie::compareByYear);
+                    auto stop1 = high_resolution_clock::now();
+                    auto duration1 = duration_cast<nanoseconds>(stop1 - start1);
+
+                    std::cout << "Shell Sort (" << duration1.count() << " nanoseconds)" << std::endl;
+                    std::cout << std::endl;
+
+                    if (movieSet.size() < 100) {
+                        int current = 1;
+                        for (int i = movieSet.size() - 1; i >= 0; i--) {
+                            std::cout << current << ". ";
+                            movieArray[i].print();
+                            current++;
+                        }
+                    }
+                    else {
+                        int current = 1;
+                        for (int i = movieSet.size() - 1; i >= movieSet.size() - 100; i--) {
+                            std::cout << current << ". ";
+                            movieArray[i].print();
+                            current++;
+                        }
+                    }
+                    std::cout << std::endl;
+                }
+
+                // Titles in ascending order
+                else if (stoi(option) == 9) {
+                    std::cout << std::endl;
+
+                    auto start = high_resolution_clock::now();
+                    movie.mergeSortTitles(movieVector, 0, movieSet.size() - 1);
+                    auto stop = high_resolution_clock::now();
+                    auto duration = duration_cast<nanoseconds>(stop - start);
+                    std::cout << "Merge Sort (" << duration.count() << " nanoseconds)" << std::endl;
+                    std::cout << std::endl;
+
+                    if (movieSet.size() < 100) {
+                        for (int i = 0; i < movieSet.size(); i++) {
+                            std::cout << i + 1 << ". ";
+                            movieVector[i].print();
+                        }
+                    }
+                    else {
+                        for (int i = 0; i < 100; i++) {
+                            std::cout << i + 1 << ". ";
+                            movieVector[i].print();
+                        }
+                    }
+                    std::cout << std::endl;
+
+                    auto start1 = high_resolution_clock::now();
+                    Movie::shellSort<Movie>(movieArray, movieSet.size(), Movie::compareByTitle);
+                    auto stop1 = high_resolution_clock::now();
+                    auto duration1 = duration_cast<nanoseconds>(stop1 - start1);
+
+                    std::cout << "Shell Sort (" << duration1.count() << " nanoseconds)" << std::endl;
+                    std::cout << std::endl;
+
+                    if (movieSet.size() < 100) {
+                        int current = 1;
+                        for (int i = movieSet.size() - 1; i >= 0; i--) {
+                            std::cout << current << ". ";
+                            movieArray[i].print();
+                            current++;
+                        }
+                    }
+                    else {
+                        int current = 1;
+                        for (int i = movieSet.size() - 1; i >= movieSet.size() - 100; i--) {
+                            std::cout << current << ". ";
+                            movieArray[i].print();
+                            current++;
+                        }
+                    }
+                    std::cout << std::endl;
+                }
+
+                // Titles in descending order
+                else if (stoi(option) == 10) {
+                    std::cout << std::endl;
+
+                    auto start = high_resolution_clock::now();
+                    movie.mergeSortTitles(movieVector, 0, movieSet.size() - 1);
+                    auto stop = high_resolution_clock::now();
+                    auto duration = duration_cast<nanoseconds>(stop - start);
+                    std::cout << "Merge Sort (" << duration.count() << " nanoseconds)" << std::endl;
+                    std::cout << std::endl;
+
+                    if (movieSet.size() < 100) {
+                        int current = 1;
+                        for (int i = movieSet.size() - 1; i >= 0; i--) {
+                            std::cout << current << ". ";
+                            movieVector[i].print();
+                            current++;
+                        }
+                    }
+                    else {
+                        int current = 1;
+                        for (int i = movieSet.size() - 1; i >= movieSet.size() - 100; i--) {
+                            std::cout << current << ". ";
+                            movieVector[i].print();
+                            current++;
+                        }
+                    }
+                    std::cout << std::endl;
+
+                    auto start1 = high_resolution_clock::now();
+                    Movie::shellSort<Movie>(movieArray, movieSet.size(), Movie::compareByTitle);
+                    auto stop1 = high_resolution_clock::now();
+                    auto duration1 = duration_cast<nanoseconds>(stop1 - start1);
+
+                    std::cout << "Shell Sort (" << duration1.count() << " nanoseconds)" << std::endl;
+                    std::cout << std::endl;
+
+                    if (movieSet.size() < 100) {
+                        for (int i = 0; i < movieSet.size(); i++) {
+                            std::cout << i + 1 << ". ";
+                            movieArray[i].print();
+                        }
+                    }
+                    else {
+                        for (int i = 0; i < 100; i++) {
+                            std::cout << i + 1 << ". ";
+                            movieArray[i].print();
+                        }
+                    }
+                    std::cout << std::endl;
+                }
+
+                // Directors in ascending order
+                else if (stoi(option) == 11) {
+                    std::cout << std::endl;
+
+                    auto start = high_resolution_clock::now();
+                    movie.mergeSortDirectors(movieVector, 0, movieSet.size() - 1);
+                    auto stop = high_resolution_clock::now();
+                    auto duration = duration_cast<nanoseconds>(stop - start);
+                    std::cout << "Merge Sort (" << duration.count() << " nanoseconds)" << std::endl;
+                    std::cout << std::endl;
+
+                    if (movieSet.size() < 100) {
+                        for (int i = 0; i < movieSet.size(); i++) {
+                            std::cout << i + 1 << ". ";
+                            movieVector[i].print();
+                        }
+                    }
+                    else {
+                        for (int i = 0; i < 100; i++) {
+                            std::cout << i + 1 << ". ";
+                            movieVector[i].print();
+                        }
+                    }
+                    std::cout << std::endl;
+
+                    auto start1 = high_resolution_clock::now();
+                    Movie::shellSort<Movie>(movieArray, movieSet.size(), Movie::compareByDirector);
+                    auto stop1 = high_resolution_clock::now();
+                    auto duration1 = duration_cast<nanoseconds>(stop1 - start1);
+
+                    std::cout << "Shell Sort (" << duration1.count() << " nanoseconds)" << std::endl;
+                    std::cout << std::endl;
+
+                    if (movieSet.size() < 100) {
+                        int current = 1;
+                        for (int i = movieSet.size() - 1; i >= 0; i--) {
+                            std::cout << current << ". ";
+                            movieArray[i].print();
+                            current++;
+                        }
+                    }
+                    else {
+                        int current = 1;
+                        for (int i = movieSet.size() - 1; i >= movieSet.size() - 100; i--) {
+                            std::cout << current << ". ";
+                            movieArray[i].print();
+                            current++;
+                        }
+                    }
+                    std::cout << std::endl;
+                }
+
+                // Directors in descending order
+                else if (stoi(option) == 12) {
+                    std::cout << std::endl;
+
+                    auto start = high_resolution_clock::now();
+                    movie.mergeSortDirectors(movieVector, 0, movieSet.size() - 1);
+                    auto stop = high_resolution_clock::now();
+                    auto duration = duration_cast<nanoseconds>(stop - start);
+                    std::cout << "Merge Sort (" << duration.count() << " nanoseconds)" << std::endl;
+                    std::cout << std::endl;
+
+                    if (movieSet.size() < 100) {
+                        int current = 1;
+                        for (int i = movieSet.size() - 1; i >= 0; i--) {
+                            std::cout << current << ". ";
+                            movieVector[i].print();
+                            current++;
+                        }
+                    }
+                    else {
+                        int current = 1;
+                        for (int i = movieSet.size() - 1; i >= movieSet.size() - 100; i--) {
+                            std::cout << current << ". ";
+                            movieVector[i].print();
+                            current++;
+                        }
+                    }
+                    std::cout << std::endl;
+
+                    auto start1 = high_resolution_clock::now();
+                    Movie::shellSort<Movie>(movieArray, movieSet.size(), Movie::compareByDirector);
+                    auto stop1 = high_resolution_clock::now();
+                    auto duration1 = duration_cast<nanoseconds>(stop1 - start1);
+
+                    std::cout << "Shell Sort (" << duration1.count() << " nanoseconds)" << std::endl;
+                    std::cout << std::endl;
+
+                    if (movieSet.size() < 100) {
+                        for (int i = 0; i < movieSet.size(); i++) {
+                            std::cout << i + 1 << ". ";
+                            movieArray[i].print();
+                        }
+                    }
+                    else {
+                        for (int i = 0; i < 100; i++) {
+                            std::cout << i + 1 << ". ";
+                            movieArray[i].print();
+                        }
+                    }
+                    std::cout << std::endl;
+                }
+
+                // Genres in ascending order
+                else if (stoi(option) == 13) {
+                    std::cout << std::endl;
+
+                    auto start = high_resolution_clock::now();
+                    movie.mergeSortGenres(movieVector, 0, movieSet.size() - 1);
+                    auto stop = high_resolution_clock::now();
+                    auto duration = duration_cast<nanoseconds>(stop - start);
+                    std::cout << "Merge Sort (" << duration.count() << " nanoseconds)" << std::endl;
+                    std::cout << std::endl;
+
+                    if (movieSet.size() < 100) {
+                        for (int i = 0; i < movieSet.size(); i++) {
+                            std::cout << i + 1 << ". ";
+                            movieVector[i].print();
+                        }
+                    }
+                    else {
+                        for (int i = 0; i < 100; i++) {
+                            std::cout << i + 1 << ". ";
+                            movieVector[i].print();
+                        }
+                    }
+                    std::cout << std::endl;
+
+                    auto start1 = high_resolution_clock::now();
+                    Movie::shellSort<Movie>(movieArray, movieSet.size(), Movie::compareByGenre);
+                    auto stop1 = high_resolution_clock::now();
+                    auto duration1 = duration_cast<nanoseconds>(stop1 - start1);
+
+                    std::cout << "Shell Sort (" << duration1.count() << " nanoseconds)" << std::endl;
+                    std::cout << std::endl;
+
+                    if (movieSet.size() < 100) {
+                        int current = 1;
+                        for (int i = movieSet.size() - 1; i >= 0; i--) {
+                            std::cout << current << ". ";
+                            movieArray[i].print();
+                            current++;
+                        }
+                    }
+                    else {
+                        int current = 1;
+                        for (int i = movieSet.size() - 1; i >= movieSet.size() - 100; i--) {
+                            std::cout << current << ". ";
+                            movieArray[i].print();
+                            current++;
+                        }
+                    }
+                    std::cout << std::endl;
+                }
+
+                // Genres in descending order
+                else if (stoi(option) == 14) {
+                    std::cout << std::endl;
+
+                    auto start = high_resolution_clock::now();
+                    movie.mergeSortGenres(movieVector, 0, movieSet.size() - 1);
+                    auto stop = high_resolution_clock::now();
+                    auto duration = duration_cast<nanoseconds>(stop - start);
+                    std::cout << "Merge Sort (" << duration.count() << " nanoseconds)" << std::endl;
+                    std::cout << std::endl;
+
+                    if (movieSet.size() < 100) {
+                        int current = 1;
+                        for (int i = movieSet.size() - 1; i >= 0; i--) {
+                            std::cout << current << ". ";
+                            movieVector[i].print();
+                            current++;
+                        }
+                    }
+                    else {
+                        int current = 1;
+                        for (int i = movieSet.size() - 1; i >= movieSet.size() - 100; i--) {
+                            std::cout << current << ". ";
+                            movieVector[i].print();
+                            current++;
+                        }
+                    }
+                    std::cout << std::endl;
+
+                    auto start1 = high_resolution_clock::now();
+                    Movie::shellSort<Movie>(movieArray, movieSet.size(), Movie::compareByGenre);
+                    auto stop1 = high_resolution_clock::now();
+                    auto duration1 = duration_cast<nanoseconds>(stop1 - start1);
+
+                    std::cout << "Shell Sort (" << duration1.count() << " nanoseconds)" << std::endl;
+                    std::cout << std::endl;
+
+                    if (movieSet.size() < 100) {
+                        for (int i = 0; i < movieSet.size(); i++) {
+                            std::cout << i + 1 << ". ";
+                            movieArray[i].print();
+                        }
+                    }
+                    else {
+                        for (int i = 0; i < 100; i++) {
+                            std::cout << i + 1 << ". ";
+                            movieArray[i].print();
+                        }
+                    }
+                    std::cout << std::endl;
+                }
+                // If the user decides to exit
                 else if (stoi(option) == 0) {
                     exit = true;
                 }
-                    // digit is not a listed option
+                // Digit is not there
                 else {
-                    cout << "Please enter a valid option." << endl;
-                    another = true;
+                    std::cout << "Invalid Input." << std::endl;
+                    again = true;
                     continue;
                 }
             }
-                // input is not a digit
+            // Invalid (not int)
             else {
-                cout << "Please enter a valid option." << endl;
-                another = true;
+                std::cout << "Invalid Input." << std::endl;
+                again = true;
                 continue;
             }
 
@@ -517,44 +970,65 @@ int main() {
                 break;
             }
 
-            cout << endl;
-            cout << "Type 1 if you would like to test another option or 0 to exit." << endl;
-            cout << endl;
-            bool anotherTime = true;
+            // Ask the user what they want to do next
+            std::cout << std::endl;
+            std::cout << "Press 1 to go again." << std::endl;
+            std::cout << "Press 0 to exit." << std::endl;
+            std::cout << std::endl;
+            bool againAgain = true;
 
-            // loop for choosing different sorting options
-            while (anotherTime) {
-                getline(cin, option);
-                // if input is a digit
+            // User input
+            while (againAgain) {
+                getline(std::cin, option);
                 if (!option.empty() && isdigit(option.at(0)) && option.size() == 1) {
-                    // 0 -> exit
+                    // User wants to exit
                     if (stoi(option) == 0) {
                         exit = true;
-                        another = false;
-                        anotherTime = false;
+                        again = false;
+                        againAgain = false;
                         break;
                     }
-                        // 1 -> continue looping through second menu
+                    // User wants to continue
                     else if (stoi(option) == 1) {
-                        another = true;
-                        anotherTime = false;
+                        again = true;
+                        againAgain = false;
                     }
-                        // not btwn 0 and 1
                     else {
-                        cout << "Please enter a valid option." << endl;
+                        std::cout << "Invalid Input." << std::endl;
                     }
                 }
-                    // not a digit
                 else if (!option.empty()) {
-                    cout << "Please enter a valid option." << endl;
+                    std::cout << "Invalid Input." << std::endl;
                 }
             }
         }
     }
-    cout << endl;
-    cout << "Thank you for making Movie Magic!" << endl;
 
+    // Created with: https://www.asciiart.eu/text-to-ascii-art
+    std::cout << R"(
+    /\_/\  /\_/\  /\_/\  /\_/\  /\_/\  /\_/\  /\_/\  /\_/\  /\_/\  /\_/\
+   ( o.o )( o.o )( o.o )( o.o )( o.o )( o.o )( o.o )( o.o )( o.o )( o.o )
+    > ^ <  > ^ <  > ^ <  > ^ <  > ^ <  > ^ <  > ^ <  > ^ <  > ^ <  > ^ <
+    /\_/\                                                          /\_/\
+   ( o.o )                                                        ( o.o )
+    > ^ <           ____                                           > ^ <
+    /\_/\          / ___|  ___  ___   _   _  ___  _   _            /\_/\
+   ( o.o )         \___ \ / _ \/ _ \ | | | |/ _ \| | | |          ( o.o )
+    > ^ <           ___) |  __/  __/ | |_| | (_) | |_| |           > ^ <
+    /\_/\          |____/ \___|\___|  \__, |\___/ \__,_|           /\_/\
+   ( o.o )                            |___/                       ( o.o )
+    > ^ <                       _     _   _                _       > ^ <
+    /\_/\       _ __   _____  _| |_  | |_(_)_ __ ___   ___| |      /\_/\
+   ( o.o )     | '_ \ / _ \ \/ / __| | __| | '_ ` _ \ / _ \ |     ( o.o )
+    > ^ <      | | | |  __/>  <| |_  | |_| | | | | | |  __/_|      > ^ <
+    /\_/\      |_| |_|\___/_/\_\\__|  \__|_|_| |_| |_|\___(_)      /\_/\
+   ( o.o )                                                        ( o.o )
+    > ^ <                                                          > ^ <
+    /\_/\  /\_/\  /\_/\  /\_/\  /\_/\  /\_/\  /\_/\  /\_/\  /\_/\  /\_/\
+   ( o.o )( o.o )( o.o )( o.o )( o.o )( o.o )( o.o )( o.o )( o.o )( o.o )
+    > ^ <  > ^ <  > ^ <  > ^ <  > ^ <  > ^ <  > ^ <  > ^ <  > ^ <  > ^ <)" << std::endl;
+
+    // Delete dynamically allocated movie array
     delete[] movieArray;
-    delete[] movieArray2;
     return 0;
 }

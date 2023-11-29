@@ -4,62 +4,123 @@
 #include <vector>
 #include <sstream>
 #include <array>
-using namespace std;
+#include <functional>
 
 class Movie {
 private:
-    string title = "";
-    vector<string> genre = {};
-    vector<string> director = {};
+    std::string title = "";
+    std::vector<std::string> genre = {};
+    std::vector<std::string> director = {};
     int year = 0;
     int length = 0;
     float rating = 0.0;
     int numRatings = 0;
 public:
-    //member functions and constructors
+    // Constructors
     Movie() {}
-    Movie(string title, vector<string>& genre, vector<string>& director, int year, int length, float rating, int numRatings);
-    // get functions
-    vector<string>& getGenre();
-    vector<string>& getDirector();
-    int getLength();
-    float getRating();
-    int getNumRatings();
+    Movie(std::string title, std::vector<std::string>& genre, std::vector<std::string>& director, int year, int length, float rating, int numRatings);
 
-    // print info
+    // Getters
+    const std::vector<std::string>& getGenre() const;
+    const std::vector<std::string>& getDirector() const;
+    int getLength() const;
+    float getRating() const;
+    int getNumRatings() const;
+    int getYear() const;
+    std::string getTitle() const;
+
+    // Print
     void print();
 
-    // input validation
-    bool validDirectorName(string director);
-    bool validGenreInput(string line);
-    bool onlyNumbers(string line);
+    // Validate User Input
+    bool validateDirector(const std::string& director);
+    bool validateGenre(const std::string& line);
 
-    // quick sort
-    int partition(Movie* arr, int low, int high);
-    // helper functions for Quick Sort
-    void swap(Movie* a, Movie* b);
-    void quickSort(Movie* arr, int low, int high);
-    void quickSortRatings(Movie* arr, int low, int high);
-    void quickSortNumOfRatings(Movie* arr, int low, int high);
-    int partitionRating(Movie* arr, int low, int high);
-    int partitionNumOfRatings(Movie* arr, int low, int high);
-
-
-    // radix sort length
-    void radixSortLength(Movie* movies, int size);
-    void radixSortLengthHelper(Movie* movies, int size, int digit);
-    int findMaxLength(Movie* movies, int size);
-
-    // radix sort ratings
-    void radixSortRatings(Movie* movies, int size);
-    void radixSortRatingsHelper(Movie* movies, int size, int digit);
-    int findMaxRating(Movie* movies, int size);
-
-    // radix sort numratings
-    void radixSortNumRatings(Movie* movies, int size);
-    void radixSortNumRatingsHelper(Movie* movies, int size, int digit);
-    int findMaxNumRating(Movie* movies, int size);
-
-    // operator overload to add object to set
+    // Operator Overloading
     bool operator<(const Movie& movie1) const;
+
+    // Merge Sort Functions
+    void mergeLength(std::vector<Movie>&, int left, int mid, int right);
+    void mergeRatings(std::vector<Movie>&, int left, int mid, int right);
+    void mergeNumRatings(std::vector<Movie>&, int left, int mid, int right);
+    void mergeYears(std::vector<Movie>&, int left, int mid, int right);
+    void mergeGenres(std::vector<Movie>&, int left, int mid, int right);
+    void mergeDirectors(std::vector<Movie>&, int left, int mid, int right);
+    void mergeTitles(std::vector<Movie>&, int left, int mid, int right);
+
+    void mergeSortGenres(std::vector<Movie>& arr, int left, int right);
+    void mergeSortDirectors(std::vector<Movie>& arr, int left, int right);
+    void mergeSortTitles(std::vector<Movie>& arr, int left, int right);
+    void mergeSortLength(std::vector<Movie>& arr, int left, int right);
+    void mergeSortRatings(std::vector<Movie>& arr, int left, int right);
+    void mergeSortNumRatings(std::vector<Movie>& arr, int left, int right);
+    void mergeSortYears(std::vector<Movie>&, int left, int right);
+
+    // Shell Sort Functions
+    // Citation: https://www.geeksforgeeks.org/templates-cpp/#
+    template <typename T>
+    // Citation: DSA Fall 2023 Slides and Lectures with Professor Amanpreet Kapoor
+    static void shellSort(T* arr, int size, const std::function<bool(const T&, const T&)>& compare) {
+        for (int gap = size / 2; gap > 0; gap /= 2) {
+            for (int i = gap; i < size; ++i) {
+                T temp = arr[i];
+                int j;
+
+                for (j = i; j >= gap && compare(arr[j - gap], temp); j -= gap) {
+                    arr[j] = arr[j - gap];
+                }
+
+                arr[j] = temp;
+            }
+        }
+    }
+
+    // Comparison functions for different criteria
+    static bool compareByTitle(const Movie& a, const Movie& b) {
+        return a.getTitle() < b.getTitle();
+    }
+
+    static bool compareByRating(const Movie& a, const Movie& b) {
+        return a.getRating() < b.getRating();
+    }
+
+    static bool compareByYear(const Movie& a, const Movie& b) {
+        return a.getYear() < b.getYear();
+    }
+
+    static bool compareByNumRatings(const Movie& a, const Movie& b) {
+        return a.getNumRatings() < b.getNumRatings();
+    }
+
+    static bool compareByLength(const Movie& a, const Movie& b) {
+        return a.getLength() < b.getLength();
+    }
+
+    static bool compareByDirector(const Movie& a, const Movie& b) {
+        const std::vector<std::string>& directorsA = a.getDirector();
+        const std::vector<std::string>& directorsB = b.getDirector();
+
+        // Compare directors lexicographically
+        for (size_t i = 0; i < directorsA.size() && i < directorsB.size(); ++i) {
+            if (directorsA[i] != directorsB[i]) {
+                return directorsA[i] < directorsB[i];
+            }
+        }
+
+        return a.getDirector() < b.getDirector();
+    }
+
+    static bool compareByGenre(Movie a, Movie b) {
+        const std::vector<std::string>& genresA = a.getGenre();
+        const std::vector<std::string>& genresB = b.getGenre();
+
+        // Compare genres lexicographically
+        for (size_t i = 0; i < genresA.size() && i < genresB.size(); ++i) {
+            if (genresA[i] != genresB[i]) {
+                return genresA[i] < genresB[i];
+            }
+        }
+
+        return a.getGenre() < b.getGenre();
+    }
 };

@@ -51,13 +51,13 @@ build cmake_object_order_depends_target_BingeBuddy: phony || CMakeFiles/BingeBud
 
 build CMakeFiles/BingeBuddy.dir/main.cpp.obj: CXX_COMPILER__BingeBuddy_Debug C$:/Users/aydin/CLionProjects/BingeBuddy/main.cpp || cmake_object_order_depends_target_BingeBuddy
   DEP_FILE = CMakeFiles\BingeBuddy.dir\main.cpp.obj.d
-  FLAGS = -g -fdiagnostics-color=always -std=gnu++14
+  FLAGS = -g -fdiagnostics-color=always
   OBJECT_DIR = CMakeFiles\BingeBuddy.dir
   OBJECT_FILE_DIR = CMakeFiles\BingeBuddy.dir
 
 build CMakeFiles/BingeBuddy.dir/Movie.cpp.obj: CXX_COMPILER__BingeBuddy_Debug C$:/Users/aydin/CLionProjects/BingeBuddy/Movie.cpp || cmake_object_order_depends_target_BingeBuddy
   DEP_FILE = CMakeFiles\BingeBuddy.dir\Movie.cpp.obj.d
-  FLAGS = -g -fdiagnostics-color=always -std=gnu++14
+  FLAGS = -g -fdiagnostics-color=always
   OBJECT_DIR = CMakeFiles\BingeBuddy.dir
   OBJECT_FILE_DIR = CMakeFiles\BingeBuddy.dir
 
