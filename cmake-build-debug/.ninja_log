@@ -1,0 +1,9 @@
+# ninja log v5
+33	1589	7218749536303461	CMakeFiles/BingeBuddy.dir/Movies.cpp.obj	ef2af3e09ebb41b0
+2	760	7229352940047625	build.ninja	6d644fcc0b59dea9
+10	3261	7229335699118046	CMakeFiles/BingeBuddy.dir/main.cpp.obj	9720ad250fdd860a
+3262	3796	7229335704379060	BingeBuddy.exe	bb0a7150c6412560
+29	2406	7229335690560709	CMakeFiles/BingeBuddy.dir/Movie.cpp.obj	886ffe8ed46e4535
+62	1968	7229352971675660	CMakeFiles/BingeBuddy.dir/Movie.cpp.obj	a90b3c46d259ba34
+44	2483	7229352976823614	CMakeFiles/BingeBuddy.dir/main.cpp.obj	776da06497ec9069
+2484	2999	7229352981892551	BingeBuddy.exe	bb0a7150c6412560
